@@ -32,7 +32,7 @@ def register():
     category = ua.get('category')
     name = ua.get('name')
     version = ua.get('version')
-    os_name = ua.get('os_name')
+    os_name = ua.get('os')
     vendor = ua.get('vendor')
     os_version = ua.get('os_version')
 
