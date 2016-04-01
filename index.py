@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, redirect, url_for, render_template, flash
 from config import appHost, appPort
 from models import UserAgent
 from database import db_session
@@ -9,9 +9,22 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/register', methods=['POST'])
+def register():
     #パラメータ取得
-    agent_cd = '211132'.encode('utf-8')
-    agent_name = '田島'.encode('utf-8')
+    agent_cd = request.form['agent_cd']
+    agent_name = request.form['agent_name']
+
+    #パラメータチェック
+    if not agent_cd or not agent_name:
+        flash('入力してください。')
+        return redirect(url_for('login'))
 
     #UserAgent取得
     header = request.headers.get('User-Agent')
@@ -26,18 +39,15 @@ def index():
     #DB登録処理
     user_agent = UserAgent(agent_cd=agent_cd, agent_name=agent_name, category=category, name=name,
                          version=version, os_name=os_name, vendor=vendor, os_version=os_version)
-
-    db_session.add(user_agent)
-    db_session.commit()
-
-    return render_template('index.html')
-
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-@app.route('/register')
-def register():
+    try:
+        db_session.add(user_agent)
+        db_session.commit()
+    except Exception as e:
+        db_session.rollback()
+        flash('既に登録済みです。')
+        return redirect(url_for('login'))
+    finally:
+        db_session.close()
 
     return render_template('register.html')
 

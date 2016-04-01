@@ -24,7 +24,7 @@ if vcap_config :
     db_port = credentials['port']
     db_user = credentials['username']
     db_pass = credentials['password']
-    db_uri = 'mysql+pymysql://'+ db_user + ':' + db_pass+ '@'+ db_host + '/' + db_name
+    db_uri = 'mysql+pymysql://'+ db_user + ':' + db_pass+ '@'+ db_host + '/' + db_name + '?charset=utf8'
 else:
     #DBローカル開発環境
-    db_uri = 'mysql+pymysql://bluemix:bluemix@localhost/dfv_bluemix_db'
+    db_uri = 'mysql+pymysql://bluemix:bluemix@localhost/dfv_bluemix_db?charset=utf8'

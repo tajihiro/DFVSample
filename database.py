@@ -5,7 +5,7 @@ from config import db_uri
 
 engine = create_engine(db_uri, convert_unicode=True, encoding='utf-8', echo=True)
 db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
+                                         autoflush=True,
                                          bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()

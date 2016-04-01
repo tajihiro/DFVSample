@@ -5,8 +5,15 @@
     <title>Title</title>
 </head>
 <body>
-    <div>社員番号：<input type="text"></div>
-    <div>氏名：<input type="text"></div>
-    <div><input type="submit" value="登録"></div>
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    {% endwith %}
+    <form action="{{ url_for('register') }}" method="post" >
+        <div>社員番号：<input type="text" name="agent_cd"></div>
+        <div>氏名：<input type="text" name="agent_name"></div>
+        <div><input type="submit" value="登録"></div>
+    </form>
 </body>
 </html>
